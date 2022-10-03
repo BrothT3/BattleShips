@@ -1,12 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pong;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BattleShips
 {
     public class GameWorld : Game
     {
+        private NetWorkHandler _networkHandler;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -39,10 +43,16 @@ namespace BattleShips
 
         protected override void Initialize()
         {
-            GameObject player = new GameObject();
-            player.AddComponent(new Player());
-            player.AddComponent(new SpriteRenderer());
-            gameObjects.Add(player);
+
+            _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
+            _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
+            _networkHandler.SendMessageToServer(new JoinMessage()
+            {
+                playerName = "Daniel",
+                ResolutionX = _graphics.PreferredBackBufferWidth,
+                ResolutionY = _graphics.PreferredBackBufferHeight,
+                type = MessageType.initialJoin
+            });
 
 
             for (int i = 0; i < gameObjects.Count; i++)
@@ -51,6 +61,19 @@ namespace BattleShips
             }
 
             base.Initialize();
+        }
+
+        private void SetInitialPositionsMessage(SetInitialPositionsMessage initialPositionsMessage)
+        {
+            //create board and load stuff
+
+            //  _networkHandler.AddListener<SnapShot>(HandleSnapShotMessage);
+        }
+
+        private void HandleSnapShotMessage(SnapShot e)
+        {
+            //maybe where result of action is shown, animation or whatever
+
         }
 
         protected override void LoadContent()
