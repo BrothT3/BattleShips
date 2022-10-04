@@ -12,7 +12,8 @@ namespace Pong
     public class NetWorkHandler
     {
         static int port = 11000;
-        IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("20.216.185.74"), port);
+        //IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("20.216.185.74"), port);
+        IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
         UdpClient client;
         NetworkMessageBaseEventHandler messageHandler;
 
@@ -27,11 +28,11 @@ namespace Pong
 
         }
 
-        public void SendMessageToServer(NetworkMessageBase networkMessage)
+        public void SendMessageToServer(NetworkMessageBase networkMessage, MessageType messageType)
         {
             var message = new NetworkMessage()
             {
-                type = MessageType.join,
+                type = messageType,
                 message = networkMessage
             };
 

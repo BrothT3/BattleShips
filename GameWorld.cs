@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Pong;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 
 namespace BattleShips
 {
@@ -51,8 +52,15 @@ namespace BattleShips
                 playerName = "Daniel",
                 ResolutionX = _graphics.PreferredBackBufferWidth,
                 ResolutionY = _graphics.PreferredBackBufferHeight,
-                type = MessageType.initialJoin
-            });
+
+            }, MessageType.join);
+
+            _networkHandler.SendMessageToServer(new ChatMessage()
+            {
+
+                Name = "Rolf lugter",
+                chatMessage = "Ja han gør"
+            }, MessageType.chatMessage);
 
 
             for (int i = 0; i < gameObjects.Count; i++)
@@ -67,7 +75,7 @@ namespace BattleShips
         {
             //create board and load stuff
 
-            //  _networkHandler.AddListener<SnapShot>(HandleSnapShotMessage);
+            _networkHandler.AddListener<SnapShot>(HandleSnapShotMessage);
         }
 
         private void HandleSnapShotMessage(SnapShot e)
