@@ -9,14 +9,14 @@ namespace BattleShips
 {
     public class GameWorld : Game
     {
-        private NetWorkHandler _networkHandler;
-
+        public NetWorkHandler _networkHandler;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         private List<GameObject> gameObjects = new List<GameObject>();
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destroyedGameObjects = new List<GameObject>();
+        
 
         public GraphicsDeviceManager Graphics { get => _graphics; }
 
@@ -43,6 +43,14 @@ namespace BattleShips
 
         protected override void Initialize()
         {
+            GameObject chatWindow = new GameObject();
+            //SpriteRenderer cwsr = new SpriteRenderer();
+            Chat c = new Chat();
+            chatWindow.Transform.Position = new Vector2(30, 30);
+            //chatWindow.AddComponent(cwsr);
+            chatWindow.AddComponent(c);
+            Instantiate(chatWindow);
+            
 
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
@@ -79,7 +87,6 @@ namespace BattleShips
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].Start();
@@ -161,7 +168,7 @@ namespace BattleShips
 
             destroyedGameObjects.Clear();
             newGameObjects.Clear();
-
+            
         }
 
         /// <summary>
