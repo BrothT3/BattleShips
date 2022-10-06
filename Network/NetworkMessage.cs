@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Pong
 {
-    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage }
+    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate }
     public enum Direction { up, down }
 
     [Serializable]
@@ -47,6 +47,10 @@ namespace Pong
     {
         public string chatMessage;
         public string Name;
+    }
+    public class UpdateChat : NetworkMessageBase
+    {
+        public string LastMessage;
     }
 
     [Serializable]

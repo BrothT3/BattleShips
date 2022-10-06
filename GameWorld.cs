@@ -10,7 +10,7 @@ namespace BattleShips
 {
     public class GameWorld : Game
     {
-        private NetWorkHandler _networkHandler;
+        public NetWorkHandler _networkHandler;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -58,10 +58,13 @@ namespace BattleShips
             _networkHandler.SendMessageToServer(new ChatMessage()
             {
 
-                Name = "Rolf lugter",
-                chatMessage = "Ja han gør"
+                Name = "Daniel",
+                chatMessage = "Tester"
             }, MessageType.chatMessage);
 
+            GameObject chat = new GameObject();
+            chat.AddComponent(new Chat() { Pos = new Vector2(50, 30) });
+            Instantiate(chat);
 
             for (int i = 0; i < gameObjects.Count; i++)
             {
