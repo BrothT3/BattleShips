@@ -1,10 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System;
 using Pong;
 using System.Diagnostics;
+
 
 namespace BattleShips
 {
@@ -16,8 +20,10 @@ namespace BattleShips
         public bool enterReleased = true;
         bool myBoxHasFocus = false;
         public bool typing = true;
+
         public StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
         public Vector2 Pos;
+
 
 
 
@@ -48,8 +54,10 @@ namespace BattleShips
             {
                 enterReleased = false;
                 myBoxHasFocus = false;
+
                 SendMessage(myTextBoxDisplayCharacters.ToString());
                 myTextBoxDisplayCharacters.Clear();
+
             }
             if (myBoxHasFocus)
             {
@@ -65,6 +73,8 @@ namespace BattleShips
                 enterReleased = true;
             }
         }
+
+
 
 
         public void OnInput(object sender, TextInputEventArgs e)
@@ -95,7 +105,9 @@ namespace BattleShips
 
         }
 
+
         double updateTimer = 1;
+
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -103,6 +115,7 @@ namespace BattleShips
                 //GameWorld.Instance.Exit();
             }
             CheckEnterOnMyBox();
+
 
             //check for messages
             updateTimer -= GameWorld.DeltaTime;
@@ -113,14 +126,17 @@ namespace BattleShips
             }
 
 
+
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (myBoxHasFocus)
+
                 spriteBatch.DrawString(font, "write something", Pos, Color.Red);
             try
             {
                 spriteBatch.DrawString(font, $"{myTextBoxDisplayCharacters}", new Vector2(Pos.X - 20, Pos.X + 20), Color.Black);
+
             }
             catch (ArgumentException)
             {
@@ -132,6 +148,7 @@ namespace BattleShips
 
 
         }
+
 
         /// <summary>
         /// Creats a new instance of the ChatMessage class, sending the string to our server
@@ -156,5 +173,6 @@ namespace BattleShips
 
             }, MessageType.chatUpdate);
         }
+
     }
 }

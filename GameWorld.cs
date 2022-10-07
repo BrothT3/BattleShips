@@ -17,12 +17,14 @@ namespace BattleShips
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         public SpriteFont Font;
-
+        public Texture2D pixel;
         private StringBuilder chatLogBuilder = new StringBuilder();
 
         public List<GameObject> gameObjects = new List<GameObject>();
+
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destroyedGameObjects = new List<GameObject>();
+        
 
         public GraphicsDeviceManager Graphics { get => _graphics; }
         public static float DeltaTime;
@@ -48,7 +50,28 @@ namespace BattleShips
 
         protected override void Initialize()
         {
+            GameObject chatWindow = new GameObject();
+            //SpriteRenderer cwsr = new SpriteRenderer();
+            Chat c = new Chat();
+            chatWindow.Transform.Position = new Vector2(30, 30);
+            //chatWindow.AddComponent(cwsr);
+            chatWindow.AddComponent(c);
+            Instantiate(chatWindow);
 
+            GameObject Board1 = new GameObject();
+            Board b1 = new Board(9, 24, 24, 0);
+            SpriteRenderer b1sr = new SpriteRenderer();
+
+            Board1.AddComponent(b1);
+            Instantiate(Board1);
+
+            GameObject Board2 = new GameObject();
+            Board b2 = new Board(9, 24, 24, 10);
+            SpriteRenderer b2sr = new SpriteRenderer();
+            
+            Board2.AddComponent(b2);
+            Instantiate(Board2);
+            
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
@@ -112,9 +135,11 @@ namespace BattleShips
 
         protected override void LoadContent()
         {
-            Font = Content.Load<SpriteFont>("chatFont");
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Font = Content.Load<SpriteFont>("chatFont");
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            pixel = Content.Load<Texture2D>("Pixel");
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].Start();
@@ -133,7 +158,7 @@ namespace BattleShips
             {
                 gameObjects[i].Update(gameTime);
             }
-
+            
             base.Update(gameTime);
             //adds and removes new objects
             CleanUp();
@@ -205,7 +230,7 @@ namespace BattleShips
 
             destroyedGameObjects.Clear();
             newGameObjects.Clear();
-
+            
         }
 
         /// <summary>
