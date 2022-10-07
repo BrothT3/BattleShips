@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BattleShips;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Net;
@@ -94,9 +95,13 @@ namespace Pong
                                 Debug.WriteLine("Got a snapshot " + complexMessage);
                                 messageHandler.Raise(networkMessage);
                                 break;
-                            case MessageType.initialJoin:
-                                networkMessage = complexMessage["message"].ToObject<SetInitialPositionsMessage>();
-                                Debug.WriteLine("Got an initialJoinMessage " + complexMessage);
+                            case MessageType.join:
+                                networkMessage = complexMessage["message"].ToObject<JoinMessage>();
+                                Debug.WriteLine("Got an JoinMessage " + complexMessage);
+                                messageHandler.Raise(networkMessage);
+                                break;
+                            case MessageType.chatUpdate:
+                                networkMessage = complexMessage["message"].ToObject<UpdateChat>();
                                 messageHandler.Raise(networkMessage);
                                 break;
                             default:

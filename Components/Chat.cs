@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Text;
 using System;
 using Pong;
+using System.Diagnostics;
 
 namespace BattleShips
 {
@@ -15,8 +16,9 @@ namespace BattleShips
         public bool enterReleased = true;
         bool myBoxHasFocus = false;
         public bool typing = true;
-        StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
+        public StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
         public Vector2 Pos;
+
 
 
         public Chat()
@@ -92,6 +94,8 @@ namespace BattleShips
 
 
         }
+
+        double updateTimer = 1;
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -100,8 +104,13 @@ namespace BattleShips
             }
             CheckEnterOnMyBox();
 
-
-
+            //check for messages
+            updateTimer -= GameWorld.DeltaTime;
+            if (updateTimer < 0)
+            {
+                ReceiveMessage();
+                updateTimer = 1;
+            }
 
 
         }
@@ -111,7 +120,7 @@ namespace BattleShips
                 spriteBatch.DrawString(font, "write something", Pos, Color.Red);
             try
             {
-                spriteBatch.DrawString(font, $"{myTextBoxDisplayCharacters}", new Vector2(30, 50), Color.Black);
+                spriteBatch.DrawString(font, $"{myTextBoxDisplayCharacters}", new Vector2(Pos.X - 20, Pos.X + 20), Color.Black);
             }
             catch (ArgumentException)
             {
@@ -139,5 +148,13 @@ namespace BattleShips
             }, MessageType.chatMessage);
         }
 
+
+        public void ReceiveMessage()
+        {
+            GameWorld.Instance._networkHandler.SendMessageToServer(new UpdateChat()
+            {
+
+            }, MessageType.chatUpdate);
+        }
     }
 }
