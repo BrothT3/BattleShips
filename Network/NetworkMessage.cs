@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleShips;
+using System;
 using System.Collections.Generic;
 
 namespace Pong
@@ -51,6 +52,7 @@ namespace Pong
     public class UpdateChat : NetworkMessageBase
     {
         public string LastMessage;
+        public string Name;
     }
 
     [Serializable]

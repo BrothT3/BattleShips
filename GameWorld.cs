@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pong;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
+using System.Text;
 
 namespace BattleShips
 {
@@ -14,13 +16,15 @@ namespace BattleShips
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        public SpriteFont Font;
 
-        private List<GameObject> gameObjects = new List<GameObject>();
+        private StringBuilder chatLogBuilder = new StringBuilder();
+
+        public List<GameObject> gameObjects = new List<GameObject>();
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destroyedGameObjects = new List<GameObject>();
 
         public GraphicsDeviceManager Graphics { get => _graphics; }
-
         public static float DeltaTime;
         private static GameWorld instance;
         public static GameWorld Instance
@@ -47,6 +51,7 @@ namespace BattleShips
 
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
+            _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
             _networkHandler.SendMessageToServer(new JoinMessage()
             {
                 playerName = "Daniel",
@@ -86,9 +91,28 @@ namespace BattleShips
             //maybe where result of action is shown, animation or whatever
 
         }
+        string prevMessage;
+        /// <summary>
+        /// Adds chat message from server to the chatLogBuilder if it's a new message
+        /// </summary>
+        /// <param name="updateChat"></param>
+        private void HandleChatUpdate(UpdateChat updateChat)
+        {
+
+            string currentMessage = $"{updateChat.Name}: {updateChat.LastMessage}";
+
+            if (currentMessage != prevMessage)
+            {
+                chatLogBuilder.AppendLine(currentMessage);
+                //TODO fjern fra stringbuilder når x beskeder er der
+            }
+            prevMessage = $"{updateChat.Name}: {updateChat.LastMessage}";
+
+        }
 
         protected override void LoadContent()
         {
+            Font = Content.Load<SpriteFont>("chatFont");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             for (int i = 0; i < gameObjects.Count; i++)
@@ -121,6 +145,15 @@ namespace BattleShips
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
+
+            //Skal måske flyttes
+            if (chatLogBuilder != null)
+            {
+                for (int i = 0; i < chatLogBuilder.Length; i++)
+                {
+                    _spriteBatch.DrawString(Font, chatLogBuilder, new Vector2(300, 100), Color.Black);
+                }
+            }
 
             for (int i = 0; i < gameObjects.Count; i++)
             {
