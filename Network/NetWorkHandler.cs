@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BattleShips;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Net;
@@ -12,7 +13,8 @@ namespace Pong
     public class NetWorkHandler
     {
         static int port = 11000;
-        IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("20.216.185.74"), port);
+        //IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("20.216.185.74"), port);
+        IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
         UdpClient client;
         NetworkMessageBaseEventHandler messageHandler;
 
@@ -27,11 +29,11 @@ namespace Pong
 
         }
 
-        public void SendMessageToServer(NetworkMessageBase networkMessage)
+        public void SendMessageToServer(NetworkMessageBase networkMessage, MessageType messageType)
         {
             var message = new NetworkMessage()
             {
-                type = MessageType.join,
+                type = messageType,
                 message = networkMessage
             };
 
@@ -93,9 +95,13 @@ namespace Pong
                                 Debug.WriteLine("Got a snapshot " + complexMessage);
                                 messageHandler.Raise(networkMessage);
                                 break;
-                            case MessageType.initialJoin:
-                                networkMessage = complexMessage["message"].ToObject<SetInitialPositionsMessage>();
-                                Debug.WriteLine("Got an initialJoinMessage " + complexMessage);
+                            case MessageType.join:
+                                networkMessage = complexMessage["message"].ToObject<JoinMessage>();
+                                Debug.WriteLine("Got an JoinMessage " + complexMessage);
+                                messageHandler.Raise(networkMessage);
+                                break;
+                            case MessageType.chatUpdate:
+                                networkMessage = complexMessage["message"].ToObject<UpdateChat>();
                                 messageHandler.Raise(networkMessage);
                                 break;
                             default:

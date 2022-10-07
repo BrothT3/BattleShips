@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BattleShips;
+using System;
 using System.Collections.Generic;
 
 namespace Pong
 {
-    public enum MessageType { movement, snapshot, join, initialJoin }
+    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate }
     public enum Direction { up, down }
 
     [Serializable]
@@ -18,8 +19,7 @@ namespace Pong
     [Serializable]
     public class NetworkMessageBase
     {
-        public MessageType type;
-        public NetworkMessageBase message;
+    
     }
 
     [Serializable]
@@ -42,6 +42,17 @@ namespace Pong
         public string playerName;
         public int ResolutionX;
         public int ResolutionY;
+    }
+    [Serializable]
+    public class ChatMessage : NetworkMessageBase
+    {
+        public string chatMessage;
+        public string Name;
+    }
+    public class UpdateChat : NetworkMessageBase
+    {
+        public string LastMessage;
+        public string Name;
     }
 
     [Serializable]

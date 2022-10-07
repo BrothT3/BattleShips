@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
+
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
+using System;
+using Pong;
+using System.Diagnostics;
 
 
 namespace BattleShips
@@ -17,7 +20,11 @@ namespace BattleShips
         public bool enterReleased = true;
         bool myBoxHasFocus = false;
         public bool typing = true;
-        StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
+
+        public StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
+        public Vector2 Pos;
+
+
 
 
         public Chat()
@@ -47,6 +54,10 @@ namespace BattleShips
             {
                 enterReleased = false;
                 myBoxHasFocus = false;
+
+                SendMessage(myTextBoxDisplayCharacters.ToString());
+                myTextBoxDisplayCharacters.Clear();
+
             }
             if (myBoxHasFocus)
             {
@@ -62,6 +73,10 @@ namespace BattleShips
                 enterReleased = true;
             }
         }
+
+
+
+
         public void OnInput(object sender, TextInputEventArgs e)
         {
 
@@ -89,6 +104,10 @@ namespace BattleShips
 
 
         }
+
+
+        double updateTimer = 1;
+
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -98,6 +117,13 @@ namespace BattleShips
             CheckEnterOnMyBox();
 
 
+            //check for messages
+            updateTimer -= GameWorld.DeltaTime;
+            if (updateTimer < 0)
+            {
+                ReceiveMessage();
+                updateTimer = 1;
+            }
 
 
 
@@ -105,10 +131,12 @@ namespace BattleShips
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (myBoxHasFocus)
-                spriteBatch.DrawString(font, "write something", new Vector2(50, 30), Color.Red);
+
+                spriteBatch.DrawString(font, "write something", Pos, Color.Red);
             try
             {
-                spriteBatch.DrawString(font, $"{myTextBoxDisplayCharacters}", new Vector2(30, 50), Color.Black);
+                spriteBatch.DrawString(font, $"{myTextBoxDisplayCharacters}", new Vector2(Pos.X - 20, Pos.X + 20), Color.Black);
+
             }
             catch (ArgumentException)
             {
@@ -119,6 +147,31 @@ namespace BattleShips
             }
 
 
+        }
+
+
+        /// <summary>
+        /// Creats a new instance of the ChatMessage class, sending the string to our server
+        /// via the NetworkHandler
+        /// </summary>
+        /// <param name="message"></param>
+        public void SendMessage(string message)
+        {
+            GameWorld.Instance._networkHandler.SendMessageToServer(new ChatMessage()
+            {
+                Name = "Placeholder",
+                chatMessage = message,
+
+            }, MessageType.chatMessage);
+        }
+
+
+        public void ReceiveMessage()
+        {
+            GameWorld.Instance._networkHandler.SendMessageToServer(new UpdateChat()
+            {
+
+            }, MessageType.chatUpdate);
         }
 
     }
