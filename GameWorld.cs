@@ -12,7 +12,7 @@ namespace BattleShips
         public NetWorkHandler _networkHandler;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
+        public Texture2D pixel;
         private List<GameObject> gameObjects = new List<GameObject>();
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destroyedGameObjects = new List<GameObject>();
@@ -50,8 +50,21 @@ namespace BattleShips
             //chatWindow.AddComponent(cwsr);
             chatWindow.AddComponent(c);
             Instantiate(chatWindow);
-            
 
+            GameObject Board1 = new GameObject();
+            Board b1 = new Board(9, 24, 24, 0);
+            SpriteRenderer b1sr = new SpriteRenderer();
+
+            Board1.AddComponent(b1);
+            Instantiate(Board1);
+
+            GameObject Board2 = new GameObject();
+            Board b2 = new Board(9, 24, 24, 10);
+            SpriteRenderer b2sr = new SpriteRenderer();
+            
+            Board2.AddComponent(b2);
+            Instantiate(Board2);
+            
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.SendMessageToServer(new JoinMessage()
@@ -86,7 +99,9 @@ namespace BattleShips
 
         protected override void LoadContent()
         {
+            
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            pixel = Content.Load<Texture2D>("Pixel");
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].Start();
@@ -105,7 +120,7 @@ namespace BattleShips
             {
                 gameObjects[i].Update(gameTime);
             }
-
+            
             base.Update(gameTime);
             //adds and removes new objects
             CleanUp();
