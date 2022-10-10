@@ -75,20 +75,7 @@ namespace BattleShips
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
-            _networkHandler.SendMessageToServer(new JoinMessage()
-            {
-                playerName = "Daniel",
-                ResolutionX = _graphics.PreferredBackBufferWidth,
-                ResolutionY = _graphics.PreferredBackBufferHeight,
-
-            }, MessageType.join);
-
-            _networkHandler.SendMessageToServer(new ChatMessage()
-            {
-
-                Name = "Daniel",
-                chatMessage = "Tester"
-            }, MessageType.chatMessage);
+            //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(50, 30) });
@@ -130,6 +117,10 @@ namespace BattleShips
                 //TODO fjern fra stringbuilder når x beskeder er der
             }
             prevMessage = $"{updateChat.Name}: {updateChat.LastMessage}";
+
+        }
+        private void RegisterBoard(SendBoard sendBoard)
+        {
 
         }
 

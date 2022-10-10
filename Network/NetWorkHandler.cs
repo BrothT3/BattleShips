@@ -104,6 +104,10 @@ namespace Pong
                                 networkMessage = complexMessage["message"].ToObject<UpdateChat>();
                                 messageHandler.Raise(networkMessage);
                                 break;
+                            case MessageType.sendBoard:
+                                networkMessage = complexMessage["message"].ToObject<SendBoard>();
+                                messageHandler.Raise(networkMessage);
+                                break;
                             default:
                                 break;
                         }
