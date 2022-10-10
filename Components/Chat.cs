@@ -153,6 +153,11 @@ namespace BattleShips
                 else
                     myTextBoxDisplayCharacters.Length--;
             }
+            if (GameStateController.Instance.currentGameState == WaitingForOpponent.Instance)
+            {
+                spriteBatch.DrawString(GameWorld.Instance.Font, "Waiting For Opponent", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2), Color.Black);
+            }
+                
 
 
         }
@@ -203,6 +208,7 @@ namespace BattleShips
                     ResolutionY = GameWorld.Instance.Graphics.PreferredBackBufferHeight,
 
                 }, MessageType.join);
+                GameStateController.Instance.ChangeGameState(WaitingForOpponent.Instance);
             }
         }
     }
