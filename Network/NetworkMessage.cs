@@ -1,10 +1,13 @@
 ﻿using BattleShips;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace BattleShips
 {
-    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate, turnUpdate, checkConnection }
+
+    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate, turnUpdate, checkConnection, sendBoard }
+
     public enum Direction { up, down }
 
     [Serializable]
@@ -76,5 +79,11 @@ namespace BattleShips
         public int rightPlayeryXPos;
         public int ballXpos;
         public int ballYPos;
+    }
+    [Serializable]
+    public class SendBoard : NetworkMessageBase
+    {
+        public Dictionary<Point, int> Board { get; set; }
+        public string Name;
     }
 }
