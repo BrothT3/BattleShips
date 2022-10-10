@@ -13,6 +13,7 @@ namespace BattleShips
     public class GameWorld : Game
     {
         public NetWorkHandler _networkHandler;
+        public GameObject Player;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -58,6 +59,10 @@ namespace BattleShips
             //chatWindow.AddComponent(c);
             //Instantiate(chatWindow);
 
+            Player = new GameObject();
+            Player.AddComponent(new User());
+            Instantiate(Player);
+
             GameObject Board1 = new GameObject();
             Board b1 = new Board(9, 24, 24, 0);
             SpriteRenderer b1sr = new SpriteRenderer();
@@ -75,16 +80,11 @@ namespace BattleShips
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
-            _networkHandler.SendMessageToServer(new JoinMessage()
-            {
-                playerName = "Daniel",
-                ResolutionX = _graphics.PreferredBackBufferWidth,
-                ResolutionY = _graphics.PreferredBackBufferHeight,
-
-            }, MessageType.join);
+            _networkHandler.AddListener<CheckConnection>(ConnectionCheck);
+          
 
             GameObject chat = new GameObject();
-            chat.AddComponent(new Chat() { Pos = new Vector2(50, 30) });
+            chat.AddComponent(new Chat() { Pos = new Vector2(300, 50) });
             Instantiate(chat);
 
             for (int i = 0; i < gameObjects.Count; i++)
@@ -126,6 +126,11 @@ namespace BattleShips
 
         }
 
+        private void ConnectionCheck(CheckConnection checkConnection)
+        {
+            Debug.WriteLine("Connection checked");
+        }
+
         protected override void LoadContent()
         {
 
@@ -140,7 +145,7 @@ namespace BattleShips
 
 
         }
-
+        float timer = 2f;
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -155,6 +160,18 @@ namespace BattleShips
             base.Update(gameTime);
             //adds and removes new objects
             CleanUp();
+
+            timer -= DeltaTime;
+            if (timer < 0)
+            {
+                User user = Player.GetComponent<User>() as User;
+
+                if (user != null)
+                {
+                    _networkHandler.SendMessageToServer(new CheckConnection() { Name =user.Name }, MessageType.checkConnection);
+                }
+                timer = 2;
+            }
         }
 
         //draws all gameobjects
