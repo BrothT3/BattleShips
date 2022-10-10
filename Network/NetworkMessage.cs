@@ -83,7 +83,7 @@ namespace BattleShips
     [Serializable]
     public class SendBoard : NetworkMessageBase
     {
-        public Dictionary<Point, int> Board { get; set; }
+        public Dictionary<Point, Cell> Board { get; set; }
         public string Name;
     }
 }

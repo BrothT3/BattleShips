@@ -99,6 +99,7 @@ namespace BattleShips
         public int height;
         public int width;
         private bool isHovering;
+        public bool IsOccupied;
         public Vector2 cellVector;
         public Point Position { get => position; set => position = value; }
         public MouseState mstate { get; set; }
@@ -124,6 +125,7 @@ namespace BattleShips
             this.width = width;
             this.height = height;
             cellVector = new Vector2((position.X + 1) * width - (width / 2), (position.Y + 1) * height - (height));
+            IsOccupied = false;
         }
         public void LoadContent()
         {

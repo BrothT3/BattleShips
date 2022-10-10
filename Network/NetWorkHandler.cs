@@ -104,13 +104,11 @@ namespace BattleShips
                                 networkMessage = complexMessage["message"].ToObject<UpdateChat>();
                                 messageHandler.Raise(networkMessage);
                                 break;
-
                             case MessageType.sendBoard:
                                 networkMessage = complexMessage["message"].ToObject<SendBoard>();
                                 break;
                             case MessageType.checkConnection:
                                 networkMessage = complexMessage["message"].ToObject<CheckConnection>();
-
                                 messageHandler.Raise(networkMessage);
                                 break;
                             default:
