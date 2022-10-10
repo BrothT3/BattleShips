@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System;
-using Pong;
+using BattleShips;
 using System.Diagnostics;
 
 
@@ -24,7 +24,7 @@ namespace BattleShips
         public StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
         public Vector2 Pos;
 
-
+        private User _user;
 
 
         public Chat()
@@ -54,9 +54,17 @@ namespace BattleShips
             {
                 enterReleased = false;
                 myBoxHasFocus = false;
+                if (_user == null)
+                {
+                    SetUserName(myTextBoxDisplayCharacters);
+                    myTextBoxDisplayCharacters.Clear();
+                }
+                else
+                {
+                    SendMessage(myTextBoxDisplayCharacters.ToString());
+                    myTextBoxDisplayCharacters.Clear();
+                }
 
-                SendMessage(myTextBoxDisplayCharacters.ToString());
-                myTextBoxDisplayCharacters.Clear();
 
             }
             if (myBoxHasFocus)
@@ -157,12 +165,17 @@ namespace BattleShips
         /// <param name="message"></param>
         public void SendMessage(string message)
         {
-            GameWorld.Instance._networkHandler.SendMessageToServer(new ChatMessage()
+            if (_user != null && message.Length >= 2)
             {
-                Name = "Placeholder",
-                chatMessage = message,
+                GameWorld.Instance._networkHandler.SendMessageToServer(new ChatMessage()
+                {
+                    Name = _user.Name,
+                    chatMessage = message,
 
-            }, MessageType.chatMessage);
+                }, MessageType.chatMessage);
+            }
+
+
         }
 
 
@@ -174,5 +187,23 @@ namespace BattleShips
             }, MessageType.chatUpdate);
         }
 
+        public void SetUserName(StringBuilder name)
+        {
+            User user = GameWorld.Instance.Player.GetComponent<User>() as User;
+
+            if (user != null && name.Length >= 2)
+            {
+                _user = user;
+                _user.Name = name.ToString();
+
+                GameWorld.Instance._networkHandler.SendMessageToServer(new JoinMessage()
+                {
+                    playerName = _user.Name,
+                    ResolutionX = GameWorld.Instance.Graphics.PreferredBackBufferWidth,
+                    ResolutionY = GameWorld.Instance.Graphics.PreferredBackBufferHeight,
+
+                }, MessageType.join);
+            }
+        }
     }
 }

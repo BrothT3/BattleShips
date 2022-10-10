@@ -6,17 +6,17 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using static Pong.NetworkMessageBaseEventHandler;
+using static BattleShips.NetworkMessageBaseEventHandler;
 
-namespace Pong
+namespace BattleShips
 {
     public class NetWorkHandler
     {
         static int port = 11000;
         //IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("20.216.185.74"), port);
-        IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
-        UdpClient client;
-        NetworkMessageBaseEventHandler messageHandler;
+        private IPEndPoint groupEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+        private UdpClient client;
+        private NetworkMessageBaseEventHandler messageHandler;
 
         public NetWorkHandler(NetworkMessageBaseEventHandler networkMessageBaseEventHandler)
         {
@@ -50,7 +50,7 @@ namespace Pong
         {
             messageHandler.AddListener<T>(setInitialPositionsMessage);
         }
-       
+
         public void RemoveListener<T>(EventDelegate<T> setInitialPositionsMessage) where T : NetworkMessageBase
         {
             messageHandler.RemoveListener<T>(setInitialPositionsMessage);
@@ -104,8 +104,13 @@ namespace Pong
                                 networkMessage = complexMessage["message"].ToObject<UpdateChat>();
                                 messageHandler.Raise(networkMessage);
                                 break;
+
                             case MessageType.sendBoard:
                                 networkMessage = complexMessage["message"].ToObject<SendBoard>();
+                                break;
+                            case MessageType.checkConnection:
+                                networkMessage = complexMessage["message"].ToObject<CheckConnection>();
+
                                 messageHandler.Raise(networkMessage);
                                 break;
                             default:
