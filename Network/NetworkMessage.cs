@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BattleShips
 {
-    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate }
+    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate, turnUpdate, checkConnection }
     public enum Direction { up, down }
 
     [Serializable]
@@ -52,6 +52,18 @@ namespace BattleShips
     public class UpdateChat : NetworkMessageBase
     {
         public string LastMessage;
+        public string Name;
+    }
+
+    [Serializable]
+    public class TurnUpdate : NetworkMessageBase
+    {
+       
+    }
+
+    [Serializable]
+    public class CheckConnection : NetworkMessageBase
+    {
         public string Name;
     }
 
