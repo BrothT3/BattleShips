@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pong
+namespace BattleShips
 {
     public class NetworkMessageBaseEventHandler
     {
