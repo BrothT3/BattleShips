@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Pong
+namespace BattleShips
 {
     public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate }
     public enum Direction { up, down }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pong;
+using BattleShips;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -50,13 +50,13 @@ namespace BattleShips
 
         protected override void Initialize()
         {
-            GameObject chatWindow = new GameObject();
-            //SpriteRenderer cwsr = new SpriteRenderer();
-            Chat c = new Chat();
-            chatWindow.Transform.Position = new Vector2(30, 30);
-            //chatWindow.AddComponent(cwsr);
-            chatWindow.AddComponent(c);
-            Instantiate(chatWindow);
+            //GameObject chatWindow = new GameObject();
+            ////SpriteRenderer cwsr = new SpriteRenderer();
+            //Chat c = new Chat();
+            //chatWindow.Transform.Position = new Vector2(30, 30);
+            ////chatWindow.AddComponent(cwsr);
+            //chatWindow.AddComponent(c);
+            //Instantiate(chatWindow);
 
             GameObject Board1 = new GameObject();
             Board b1 = new Board(9, 24, 24, 0);
@@ -82,13 +82,6 @@ namespace BattleShips
                 ResolutionY = _graphics.PreferredBackBufferHeight,
 
             }, MessageType.join);
-
-            _networkHandler.SendMessageToServer(new ChatMessage()
-            {
-
-                Name = "Daniel",
-                chatMessage = "Tester"
-            }, MessageType.chatMessage);
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(50, 30) });
