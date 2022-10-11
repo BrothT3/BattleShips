@@ -15,9 +15,10 @@ namespace BattleShips
         private int cellSizeY;
         private int yOffSet;
         private bool isHovering;
+
         public List<Cell> board;
         public Dictionary<Point, Cell> cells = new Dictionary<Point, Cell>();
-        
+
 
         public Board(int cellcount, int cellsizex, int cellsizey, int yOffSet)
         {
@@ -27,7 +28,6 @@ namespace BattleShips
             this.yOffSet = yOffSet;
             cells = CreateCells();
             board = CreateBoard();
-            
         }
         public override void Awake()
         {
@@ -66,9 +66,6 @@ namespace BattleShips
         }
         public override void Start()
         {
-
-
-
 
             foreach (Cell cell in cells.Values)
             {
