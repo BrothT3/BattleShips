@@ -16,16 +16,17 @@ namespace BattleShips
     {
         public SpriteFont font;
         public static GameWindow gw;
-        public static MouseState mouseState;
+        
         public bool enterReleased = true;
         bool myBoxHasFocus = false;
         public bool typing = true;
+        
 
         public StringBuilder myTextBoxDisplayCharacters = new StringBuilder();
         public Vector2 Pos;
 
         private User _user;
-
+       
 
         public Chat()
         {
@@ -116,6 +117,8 @@ namespace BattleShips
 
         double updateTimer = 1;
 
+        
+
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -132,7 +135,7 @@ namespace BattleShips
                 ReceiveMessage();
                 updateTimer = 1;
             }
-
+            
 
 
         }
@@ -157,7 +160,21 @@ namespace BattleShips
             {
                 spriteBatch.DrawString(GameWorld.Instance.Font, "Waiting For Opponent", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth / 2, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2), Color.Black);
             }
-                
+            if (GameStateController.Instance.currentGameState == PlacingShips.Instance && PlacingShips.Instance.notEnoughRoom == true)
+            {
+                spriteBatch.DrawString(GameWorld.Instance.Font, "There is not enough space for that Ship", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2), Color.Black);
+            }
+            if (GameStateController.Instance.currentGameState == PlacingShips.Instance && PlacingShips.Instance.currentShip <5)
+            {
+                if (PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].shipdir == SHIPDIRECTION.UP)
+                {
+                    spriteBatch.Draw(PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite, new Vector2(PlacingShips.Instance.mstate.Position.X - (PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite.Width / 2), PlacingShips.Instance.mstate.Position.Y - PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite.Height), null, Color.White, PlacingShips.Instance.ChatRotation, new Vector2(), 1, SpriteEffects.None, 1);
+                }
+                else
+                spriteBatch.Draw(PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite, new Vector2(PlacingShips.Instance.mstate.Position.X + PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite.Height, PlacingShips.Instance.mstate.Position.Y - 8), null, Color.White, PlacingShips.Instance.ChatRotation, new Vector2(), 1, SpriteEffects.None, 1);
+            }
+
+
 
 
         }

@@ -20,7 +20,7 @@ namespace BattleShips
         public SpriteFont Font;
         public Texture2D pixel;
         private StringBuilder chatLogBuilder = new StringBuilder();
-
+        public Board testBoard;
         public List<GameObject> gameObjects = new List<GameObject>();
 
         private List<GameObject> newGameObjects = new List<GameObject>();
@@ -71,8 +71,10 @@ namespace BattleShips
             b1.cells[new Point(5, 5)].IsOccupied = true;
             user.Board = b1.cells;
 
+
             Board1.AddComponent(b1);
             Instantiate(Board1);
+            testBoard = b1;
 
             GameObject Board2 = new GameObject();
             Board b2 = new Board(9, 24, 24, 10);
@@ -88,8 +90,8 @@ namespace BattleShips
             //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
             _networkHandler.AddListener<CheckConnection>(ConnectionCheck);
-          
 
+            GameStateController.Instance.ChangeGameState(PlacingShips.Instance);
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(300, 50) });
@@ -184,6 +186,7 @@ namespace BattleShips
                 }
                 timer = 2;
             }
+            GameStateController.Instance.UpdateGameState();
         }
 
         //draws all gameobjects

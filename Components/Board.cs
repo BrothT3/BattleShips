@@ -15,8 +15,10 @@ namespace BattleShips
         private int cellSizeY;
         private int yOffSet;
         private bool isHovering;
-        private List<Cell> board;
-       public  Dictionary<Point, Cell> cells = new Dictionary<Point, Cell>();
+
+        public List<Cell> board;
+        public Dictionary<Point, Cell> cells = new Dictionary<Point, Cell>();
+
 
         public Board(int cellcount, int cellsizex, int cellsizey, int yOffSet)
         {
@@ -29,32 +31,41 @@ namespace BattleShips
         }
         public override void Awake()
         {
-            
+
         }
 
         public override void Update(GameTime gameTime)
         {
-            
-                foreach (Cell cell in cells.Values)
-                {
-                    cell.Update(gameTime);
-                }
-        }
-        
-        
 
-        
+            foreach (Cell cell in cells.Values)
+            {
+                cell.Update(gameTime);
+            }
+            foreach (Cell cell in board)
+            {
+                cell.Update(gameTime);
+            }
+        }
+        public  Rectangle BoardSpace
+        {
+            get
+            {
+                return new Rectangle((int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y, cellCount * cellSizeX, cellCount * cellSizeY);
+            }
+        }
+       
         public override void Draw(SpriteBatch spriteBatch)
         {
-            
-                foreach (Cell cell in cells.Values)
-                {
-                    cell.Draw(spriteBatch);
-                }
+
+            foreach (Cell cell in cells.Values)
+            {
+                cell.Draw(spriteBatch);
+            }
+
+
         }
         public override void Start()
         {
-                
 
             foreach (Cell cell in cells.Values)
             {
@@ -98,7 +109,7 @@ namespace BattleShips
         private Point position;
         public int height;
         public int width;
-        private bool isHovering;
+        public bool isHovering;
         public bool IsOccupied;
         public Vector2 cellVector;
         public Point Position { get => position; set => position = value; }
@@ -139,7 +150,7 @@ namespace BattleShips
             mstate = Mouse.GetState();
             isHovering = false;
 
-            if (cellSquare.Contains(new Vector2(mstate.X, mstate.Y)))
+            if (cellSquare.Intersects(new Rectangle(mstate.X, mstate.Y, 2, 2)))
             {
                 isHovering = true;
             }
@@ -160,7 +171,7 @@ namespace BattleShips
             spriteBatch.Draw(GameWorld.Instance.pixel, rightLine, Color.Black);
             spriteBatch.Draw(GameWorld.Instance.pixel, leftLine, Color.Black);
 
-            
+
         }
     }
 
