@@ -24,7 +24,7 @@ namespace BattleShips
 
         public void Enter()
         {
-
+            
         }
 
         public void Execute()
