@@ -30,20 +30,20 @@ namespace BattleShips
         }
 
         public void SendMessageToServer(NetworkMessageBase networkMessage, MessageType messageType)
-        {
-            var message = new NetworkMessage()
-            {
-                type = messageType,
-                message = networkMessage
-            };
+        {        
+                var message = new NetworkMessage()
+                {
+                    type = messageType,
+                    message = networkMessage
+                };
 
-            var serializedNetworkMessage = JsonConvert.SerializeObject(message);
+                var serializedNetworkMessage = JsonConvert.SerializeObject(message);
 
-            byte[] jsonAsBytes = Encoding.UTF8.GetBytes(serializedNetworkMessage);
+                byte[] jsonAsBytes = Encoding.UTF8.GetBytes(serializedNetworkMessage);
 
-            Debug.WriteLine($"Sending json message {serializedNetworkMessage} to server...");
+                Debug.WriteLine($"Sending json message {serializedNetworkMessage} to server...");
 
-            client.Send(jsonAsBytes, jsonAsBytes.Length);
+                client.Send(jsonAsBytes, jsonAsBytes.Length);                    
         }
 
         public void AddListener<T>(EventDelegate<T> setInitialPositionsMessage) where T : NetworkMessageBase
@@ -73,7 +73,7 @@ namespace BattleShips
                     JObject? complexMessage = JObject.Parse(dataEncodedShouldBeJson);
                     JToken? complexMessageType = complexMessage["type"];
 
-                    Debug.WriteLine("Got something..");
+                    Debug.WriteLine("Receiving message...");
 
                     if (complexMessage != null && complexMessageType?.Type is JTokenType.Integer)
                     {

@@ -67,6 +67,10 @@ namespace BattleShips
             Board b1 = new Board(9, 24, 24, 0);
             SpriteRenderer b1sr = new SpriteRenderer();
 
+            User user = Player.GetComponent<User>() as User;
+            b1.cells[new Point(5, 5)].IsOccupied = true;
+            user.Board = b1.cells;
+
             Board1.AddComponent(b1);
             Instantiate(Board1);
 

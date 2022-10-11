@@ -16,7 +16,7 @@ namespace BattleShips
         private int yOffSet;
         private bool isHovering;
         private List<Cell> board;
-        Dictionary<Point, Cell> cells = new Dictionary<Point, Cell>();
+       public  Dictionary<Point, Cell> cells = new Dictionary<Point, Cell>();
 
         public Board(int cellcount, int cellsizex, int cellsizey, int yOffSet)
         {
@@ -24,6 +24,8 @@ namespace BattleShips
             this.cellSizeX = cellsizex;
             this.cellSizeY = cellsizey;
             this.yOffSet = yOffSet;
+            cells = CreateCells();
+            board = CreateBoard();
         }
         public override void Awake()
         {
@@ -52,9 +54,7 @@ namespace BattleShips
         }
         public override void Start()
         {
-            
-            List<Cell> board = CreateBoard();
-            cells = CreateCells();
+                
 
             foreach (Cell cell in cells.Values)
             {
