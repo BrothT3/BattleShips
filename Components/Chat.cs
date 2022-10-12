@@ -173,7 +173,20 @@ namespace BattleShips
                 else
                 spriteBatch.Draw(PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite, new Vector2(PlacingShips.Instance.mstate.Position.X + PlacingShips.Instance.shipList[PlacingShips.Instance.currentShip].Sprite.Height, PlacingShips.Instance.mstate.Position.Y - 8), null, Color.White, PlacingShips.Instance.ChatRotation, new Vector2(), 1, SpriteEffects.None, 1);
             }
-
+            if (GameStateController.Instance.currentGameState == YourTurn.Instance)
+            {
+                spriteBatch.DrawString(GameWorld.Instance.Font, "It Is Your Turn \n" +
+                    "Select Your Target On the Upper Board", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2), Color.Black);
+                if (YourTurn.Instance.TargetHit && YourTurn.Instance.Fired)
+                {
+                    spriteBatch.DrawString(GameWorld.Instance.Font, "HIT!!", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
+                }
+                else if (YourTurn.Instance.Fired)
+                {
+                    spriteBatch.DrawString(GameWorld.Instance.Font, "MISS!!", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
+                }
+            }
+            
 
 
 

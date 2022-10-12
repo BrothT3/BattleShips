@@ -20,7 +20,9 @@ namespace BattleShips
         public SpriteFont Font;
         public Texture2D pixel;
         private StringBuilder chatLogBuilder = new StringBuilder();
-        public Board testBoard;
+        public Board UpperBoard;
+        public Board LowerBoard;
+        
         public List<GameObject> gameObjects = new List<GameObject>();
 
         private List<GameObject> newGameObjects = new List<GameObject>();
@@ -63,26 +65,26 @@ namespace BattleShips
             Player.AddComponent(new User());
             Instantiate(Player);
 
-            GameObject Board1 = new GameObject();
-            Board b1 = new Board(9, 24, 24, 0);
+            GameObject upperBoard = new GameObject();
+            Board upperB = new Board(9, 24, 24, 0);
             SpriteRenderer b1sr = new SpriteRenderer();
 
             User user = Player.GetComponent<User>() as User;
-            b1.cells[new Point(5, 5)].IsOccupied = true;
-            user.Board = b1.cells;
+
+            
 
 
-            Board1.AddComponent(b1);
-            Instantiate(Board1);
-            testBoard = b1;
+            upperBoard.AddComponent(upperB);
+            Instantiate(upperBoard);
+            UpperBoard = upperB;
 
-            GameObject Board2 = new GameObject();
-            Board b2 = new Board(9, 24, 24, 10);
+            GameObject lowerBoard = new GameObject();
+            Board lowerB = new Board(9, 24, 24, 10);
             SpriteRenderer b2sr = new SpriteRenderer();
-            
-            Board2.AddComponent(b2);
-            Instantiate(Board2);
-            
+            LowerBoard = lowerB;
+            lowerBoard.AddComponent(lowerB);
+            Instantiate(lowerBoard);
+            user.Board = lowerB.cells;
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
@@ -91,8 +93,6 @@ namespace BattleShips
             //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
             _networkHandler.AddListener<CheckConnection>(ConnectionCheck);
-
-          
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(300, 50) });
