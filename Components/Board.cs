@@ -156,7 +156,7 @@ namespace BattleShips
             mstate = Mouse.GetState();
             isHovering = false;
 
-            if (cellSquare.Contains(new Rectangle(mstate.X, mstate.Y, 2, 2)))
+            if (cellSquare.Intersects(new Rectangle(mstate.X, mstate.Y, 2, 2)))
             {
                 isHovering = true;
             }
