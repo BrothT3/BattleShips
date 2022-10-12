@@ -46,6 +46,10 @@ namespace BattleShips
             ShowCurrentShip();
             RotateShip();
             PlaceShip();
+            if (currentShip == 5)
+            {
+                GameStateController.Instance.ChangeGameState(YourTurn.Instance);
+            }
             
         }
 
@@ -85,7 +89,7 @@ namespace BattleShips
                         {
                             cell.IsOccupied = true;
                         }
-                        Cell selectedCell = GameWorld.Instance.LowerBoard.board.First(x => x.isHovering == true);
+                        Cell selectedCell = GameWorld.Instance.LowerBoard.board.Find(x => x.isHovering == true);
                         GameObject thisShip = new GameObject();
                         Type shipType = shipList[currentShip].GetType();                       
                         Ship shippy = (Ship)Activator.CreateInstance(shipType);                        

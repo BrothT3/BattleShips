@@ -46,18 +46,22 @@ namespace BattleShips
                 cell.Update(gameTime);
             }
         }
-        public  Rectangle BoardSpace
+        public Rectangle BoardSpace
         {
             get
             {
                 return new Rectangle((int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y + yOffSet * cellSizeY, cellCount * cellSizeX, cellCount * cellSizeY);
             }
         }
-       
+
         public override void Draw(SpriteBatch spriteBatch)
         {
 
             foreach (Cell cell in cells.Values)
+            {
+                cell.Draw(spriteBatch);
+            }
+            foreach (Cell cell in board)
             {
                 cell.Draw(spriteBatch);
             }
@@ -111,6 +115,8 @@ namespace BattleShips
         public int width;
         public bool isHovering;
         public bool IsOccupied;
+        public bool isFiredOn;
+        public bool isFiredOnAndShipHit;
         public Vector2 cellVector;
         public Point Position { get => position; set => position = value; }
         public MouseState mstate { get; set; }
@@ -150,19 +156,29 @@ namespace BattleShips
             mstate = Mouse.GetState();
             isHovering = false;
 
-            if (cellSquare.Intersects(new Rectangle(mstate.X, mstate.Y, 2, 2)))
+            if (cellSquare.Contains(new Rectangle(mstate.X, mstate.Y, 2, 2)))
             {
                 isHovering = true;
             }
+            
 
         }
         public void Draw(SpriteBatch spriteBatch)
         {
             var color = Color.DarkBlue * 0.2f;
-            if (isHovering)
+            if (isHovering && !isFiredOn)
+            {
+                color = Color.DarkGreen * 0.9f;
+            }
+            if (isFiredOn)
+            {
+                color = Color.Black * 0.5f;
+            }
+            if (isFiredOnAndShipHit)
             {
                 color = Color.Red * 0.9f;
             }
+
 
             spriteBatch.Draw(GameWorld.Instance.pixel, cellSquare, color);
 

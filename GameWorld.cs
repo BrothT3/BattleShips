@@ -71,7 +71,7 @@ namespace BattleShips
 
             User user = Player.GetComponent<User>() as User;
 
-            user.Board = upperB.cells;
+            
 
 
             upperBoard.AddComponent(upperB);
@@ -84,7 +84,7 @@ namespace BattleShips
             LowerBoard = lowerB;
             lowerBoard.AddComponent(lowerB);
             Instantiate(lowerBoard);
-            
+            user.Board = lowerB.cells;
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
@@ -93,7 +93,7 @@ namespace BattleShips
 
             _networkHandler.AddListener<CheckConnection>(ConnectionCheck);
 
-            GameStateController.Instance.ChangeGameState(PlacingShips.Instance);
+            GameStateController.Instance.ChangeGameState(YourTurn.Instance);
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(300, 50) });
