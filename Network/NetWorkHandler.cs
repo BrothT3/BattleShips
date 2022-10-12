@@ -111,6 +111,10 @@ namespace BattleShips
                                 networkMessage = complexMessage["message"].ToObject<CheckConnection>();
                                 messageHandler.Raise(networkMessage);
                                 break;
+                            case MessageType.changeState:
+                                networkMessage = complexMessage["message"].ToObject<ChangeGameState>();
+                                messageHandler.Raise(networkMessage);
+                                break;
                             default:
                                 break;
                         }
