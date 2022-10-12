@@ -88,12 +88,11 @@ namespace BattleShips
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
+            _networkHandler.AddListener<ChangeGameState>(NewGameState);
 
             //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
             _networkHandler.AddListener<CheckConnection>(ConnectionCheck);
-
-            GameStateController.Instance.ChangeGameState(YourTurn.Instance);
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(300, 50) });
@@ -105,6 +104,27 @@ namespace BattleShips
             }
 
             base.Initialize();
+        }
+
+        private void NewGameState(ChangeGameState nextGameState)
+        {
+            User user = Player.GetComponent<User>() as User;
+            if (nextGameState.Name == user.Name || nextGameState.Name == string.Empty || nextGameState.Name == null)
+            {
+                switch (nextGameState.nextGameState)
+                {
+                    case GameState.placeShips:
+                        GameStateController.Instance.ChangeGameState(PlacingShips.Instance);
+                        break;
+                    case GameState.waitForOpponent:
+                        break;
+                    case GameState.yourTurn:
+                        break;
+                    default:
+                        break;
+                }
+            }
+           
         }
 
         private void SetInitialPositionsMessage(SetInitialPositionsMessage initialPositionsMessage)
