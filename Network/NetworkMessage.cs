@@ -7,7 +7,8 @@ using System.Collections.Generic;
 namespace BattleShips
 {
 
-    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate, turnUpdate, checkConnection, sendBoard }
+    public enum MessageType { movement, snapshot, join, initialJoin, chatMessage, chatUpdate, turnUpdate, checkConnection, sendBoard, changeState }
+    public enum GameState { placeShips, waitForOpponent, yourTurn }
 
     public enum Direction { up, down }
 
@@ -86,5 +87,12 @@ namespace BattleShips
     {
         public Dictionary<Point, Cell> Board { get; set; }
         public string Name;
+    }
+
+    [Serializable]
+    public class ChangeGameState : NetworkMessageBase
+    {
+        public string Name;
+        public GameState nextGameState;
     }
 }

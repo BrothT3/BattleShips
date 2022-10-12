@@ -29,7 +29,8 @@ namespace BattleShips
                 return instance;
             }
         }
-        public void Enter()
+
+        private PlacingShips()
         {
             shipList[0] = new Destroyer();
             shipList[1] = new Submarine();
@@ -38,6 +39,11 @@ namespace BattleShips
             shipList[4] = new Carrier();
             currentShip = 0;
             ChatRotation = 0;
+
+        }
+        public void Enter()
+        {
+            
             
         }
 
