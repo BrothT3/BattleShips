@@ -50,7 +50,7 @@ namespace BattleShips
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
+        public Board lowerB;
         protected override void Initialize()
         {
             //GameObject chatWindow = new GameObject();
@@ -79,7 +79,7 @@ namespace BattleShips
             UpperBoard = upperB;
 
             GameObject lowerBoard = new GameObject();
-            Board lowerB = new Board(9, 24, 24, 10);
+             lowerB = new Board(9, 24, 24, 10);
             SpriteRenderer b2sr = new SpriteRenderer();
             LowerBoard = lowerB;
             lowerBoard.AddComponent(lowerB);

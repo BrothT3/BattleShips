@@ -67,13 +67,13 @@ namespace BattleShips
             //send board to server, not sure if it should be here
             User user = GameWorld.Instance.Player.GetComponent<User>() as User;
             if (user != null)
-            {
+            {              
                 GameWorld.Instance._networkHandler.SendMessageToServer(new SendBoard()
                 {
                     Name = user.Name,
-                    Board = user.Board
+                    Board = GameWorld.Instance.lowerB.cells
 
-                }, MessageType.sendBoard);;
+                }, MessageType.sendBoard);
             }        
 
         }
@@ -94,6 +94,8 @@ namespace BattleShips
                         foreach (var cell in checkedCells)
                         {
                             cell.IsOccupied = true;
+                            Point point = new Point((int)(cell.Position.X + 0.5f), (int)(cell.Position.Y + 0.5f - 10));
+                            GameWorld.Instance.lowerB.cells[point].IsOccupied = true;
                         }
                         Cell selectedCell = GameWorld.Instance.LowerBoard.board.Find(x => x.isHovering == true);
                         GameObject thisShip = new GameObject();
@@ -117,11 +119,15 @@ namespace BattleShips
                                 SSR.Rotation = (float)1.57f;
                                 break;
                         }
-
+                     
                         GameWorld.Instance.Instantiate(thisShip);
                         currentShip++;
                     }
-
+                    if (currentShip == 5)
+                    {
+                       
+                        GameStateController.Instance.ChangeGameState(WaitingForOpponent.Instance);
+                    }
                 }
                 else
                 {
