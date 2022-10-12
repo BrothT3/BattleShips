@@ -50,7 +50,7 @@ namespace BattleShips
         {
             get
             {
-                return new Rectangle((int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y, cellCount * cellSizeX, cellCount * cellSizeY);
+                return new Rectangle((int)GameObject.Transform.Position.X, (int)GameObject.Transform.Position.Y + yOffSet * cellSizeY, cellCount * cellSizeX, cellCount * cellSizeY);
             }
         }
        

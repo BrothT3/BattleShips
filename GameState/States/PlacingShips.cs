@@ -72,7 +72,7 @@ namespace BattleShips
         {
             
             mstate = Mouse.GetState();
-            if (mstate.LeftButton == ButtonState.Pressed && MReleased == true && currentShip < 5 && GameWorld.Instance.testBoard.BoardSpace.Contains(new Vector2(mstate.X, mstate.Y)))
+            if (mstate.LeftButton == ButtonState.Pressed && MReleased == true && currentShip < 5 && GameWorld.Instance.LowerBoard.BoardSpace.Contains(new Vector2(mstate.X, mstate.Y)))
             {
                 
                 MReleased = false;
@@ -85,7 +85,7 @@ namespace BattleShips
                         {
                             cell.IsOccupied = true;
                         }
-                        Cell selectedCell = GameWorld.Instance.testBoard.board.First(x => x.isHovering == true);
+                        Cell selectedCell = GameWorld.Instance.LowerBoard.board.First(x => x.isHovering == true);
                         GameObject thisShip = new GameObject();
                         Type shipType = shipList[currentShip].GetType();                       
                         Ship shippy = (Ship)Activator.CreateInstance(shipType);                        
@@ -174,7 +174,7 @@ namespace BattleShips
             get
             {
 
-                Cell selectedCell = GameWorld.Instance.testBoard.board.First(x => x.isHovering == true);
+                Cell selectedCell = GameWorld.Instance.LowerBoard.board.First(x => x.isHovering == true);
                 if (selectedCell != null)
                 {
                     Point selectedPosition = selectedCell.Position;
@@ -184,9 +184,9 @@ namespace BattleShips
                         if (shipList[currentShip].shipdir == SHIPDIRECTION.UP)
                         {
 
-                            if (GameWorld.Instance.testBoard.board.Exists(x => x.Position == new Point(selectedCell.Position.X, selectedCell.Position.Y - i)))
+                            if (GameWorld.Instance.LowerBoard.board.Exists(x => x.Position == new Point(selectedCell.Position.X, selectedCell.Position.Y - i)))
                             {
-                                Cell currentCell = GameWorld.Instance.testBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X, selectedCell.Position.Y - i));
+                                Cell currentCell = GameWorld.Instance.LowerBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X, selectedCell.Position.Y - i));
                                 if (currentCell.IsOccupied)
                                 {
                                     checkedCells.Add(currentCell);
@@ -199,9 +199,9 @@ namespace BattleShips
                         }
                         else if (shipList[currentShip].shipdir == SHIPDIRECTION.RIGHT)
                         {
-                            if (GameWorld.Instance.testBoard.board.Exists(x => x.Position == new Point(selectedCell.Position.X + i, selectedCell.Position.Y)))
+                            if (GameWorld.Instance.LowerBoard.board.Exists(x => x.Position == new Point(selectedCell.Position.X + i, selectedCell.Position.Y)))
                             {
-                                Cell currentCell = GameWorld.Instance.testBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X + i, selectedCell.Position.Y));
+                                Cell currentCell = GameWorld.Instance.LowerBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X + i, selectedCell.Position.Y));
                                 if (currentCell.IsOccupied)
                                 {
                                     checkedCells.Add(currentCell);
@@ -229,19 +229,19 @@ namespace BattleShips
         {
             get
             {
-                Cell selectedCell = GameWorld.Instance.testBoard.board.First(x => x.isHovering == true);
+                Cell selectedCell = GameWorld.Instance.LowerBoard.board.First(x => x.isHovering == true);
                 Point selectedPosition = selectedCell.Position;
                 List<Cell> checkedCells = new List<Cell>();
                 for (int i = 0; i < shipList[currentShip].CellSpan; i++)
                 {
                     if (shipList[currentShip].shipdir == SHIPDIRECTION.UP)
                     {
-                        Cell currentCell = GameWorld.Instance.testBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X, selectedCell.Position.Y - i));
+                        Cell currentCell = GameWorld.Instance.LowerBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X, selectedCell.Position.Y - i));
                         checkedCells.Add(currentCell);
                     }
                     else
                     {
-                        Cell currentCell = GameWorld.Instance.testBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X + i, selectedCell.Position.Y));
+                        Cell currentCell = GameWorld.Instance.LowerBoard.board.Find(x => x.Position == new Point(selectedCell.Position.X + i, selectedCell.Position.Y));
                         checkedCells.Add(currentCell);
                     }
                 }
