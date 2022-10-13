@@ -77,9 +77,7 @@ namespace BattleShips
 
                     if (complexMessage != null && complexMessageType?.Type is JTokenType.Integer)
                     {
-                        //we have a message that is successfully serialized
-                        //the message "Type" is int (enum)
-                        //safe to cast
+
                         MessageType mesType = (MessageType)complexMessageType.Value<int>();
                         JToken? complexMessageMessage = complexMessage["message"];
                         if (complexMessageMessage == null)
@@ -90,11 +88,6 @@ namespace BattleShips
                         NetworkMessageBase networkMessage = null;
                         switch (mesType)
                         {
-                            case MessageType.snapshot:
-                                networkMessage = complexMessage["message"].ToObject<SnapShot>();
-                                Debug.WriteLine("Got a snapshot " + complexMessage);
-                                messageHandler.Raise(networkMessage);
-                                break;
                             case MessageType.join:
                                 networkMessage = complexMessage["message"].ToObject<JoinMessage>();
                                 Debug.WriteLine("Got an JoinMessage " + complexMessage);

@@ -14,12 +14,11 @@ namespace BattleShips
 
         public void AddListener<T>(EventDelegate<T> del) where T : NetworkMessageBase
         {
-            // Early-out if we've already registered this delegate
+
             if (delegateLookup.ContainsKey(del))
                 return;
 
-            // Create a new non-generic delegate which calls our generic one.
-            // This is the delegate we actually invoke.
+
             EventDelegate internalDelegate = (e) => del((T)e);
             delegateLookup[del] = internalDelegate;
 

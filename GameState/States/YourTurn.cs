@@ -45,7 +45,6 @@ namespace BattleShips
             }
             
             Fire();
-            VictoryCondition();
             SendMouseInfo();
             if (!GameWorld.Instance.User.YourTurn)
             {
@@ -115,17 +114,6 @@ namespace BattleShips
                 }
                 
 
-                //if (selectedCell.IsOccupied)
-                //{
-                //    HitCells++;
-                //    TargetHit = true;
-                //    selectedCell.isFiredOnAndShipHit = true;
-                //}
-                //else
-                //{
-                //    TargetHit = false;
-                //    selectedCell.isFiredOn = true;
-                //}
             }
             if (mstate.LeftButton != ButtonState.Pressed)
             {
@@ -142,14 +130,7 @@ namespace BattleShips
                 }
             }
         }
-        public void VictoryCondition()
-        {
-            if (HitCells == 17)
-            {
-                //victory state eller noget
-                
-            }
-        }
+
 
     }
 }

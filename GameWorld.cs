@@ -88,15 +88,12 @@ namespace BattleShips
             Instantiate(lowerBoard);
             User.Board = lowerB.cells;
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
-            _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
             _networkHandler.AddListener<ChangeGameState>(NewGameState);
             _networkHandler.AddListener<SendMousePos>(OpponentMouse);
             _networkHandler.AddListener<TurnUpdate>(HandleTurnUpdate);
 
-            //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
-            _networkHandler.AddListener<CheckConnection>(ConnectionCheck);
 
             GameObject chat = new GameObject();
             chat.AddComponent(new Chat() { Pos = new Vector2(300, 50) });
@@ -191,19 +188,6 @@ namespace BattleShips
             }
 
         }
-
-        private void SetInitialPositionsMessage(SetInitialPositionsMessage initialPositionsMessage)
-        {
-            //create board and load stuff
-
-            _networkHandler.AddListener<SnapShot>(HandleSnapShotMessage);
-        }
-
-        private void HandleSnapShotMessage(SnapShot e)
-        {
-            //maybe where result of action is shown, animation or whatever
-
-        }
         string prevMessage;
         /// <summary>
         /// Adds chat message from server to the chatLogBuilder if it's a new message
@@ -226,15 +210,6 @@ namespace BattleShips
             }
             prevMessage = $"{updateChat.Name}: {updateChat.LastMessage}";
 
-        }
-        private void RegisterBoard(SendBoard sendBoard)
-        {
-
-        }
-
-        private void ConnectionCheck(CheckConnection checkConnection)
-        {
-            Debug.WriteLine("Connection checked");
         }
 
         protected override void LoadContent()
