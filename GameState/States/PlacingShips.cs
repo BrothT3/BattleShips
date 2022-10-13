@@ -126,7 +126,7 @@ namespace BattleShips
                     if (currentShip == 5)
                     {
                        
-                        GameStateController.Instance.ChangeGameState(WaitingForOpponent.Instance);
+                        GameStateController.Instance.ChangeGameState(YourTurn.Instance);
                     }
                 }
                 else

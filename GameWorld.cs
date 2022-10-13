@@ -14,6 +14,7 @@ namespace BattleShips
     {
         public NetWorkHandler _networkHandler;
         public GameObject Player;
+        public User User;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -69,9 +70,10 @@ namespace BattleShips
             Board upperB = new Board(9, 24, 24, 0);
             SpriteRenderer b1sr = new SpriteRenderer();
 
-            User user = Player.GetComponent<User>() as User;
-
+            //User user = Player.GetComponent<User>() as User;
+            User = Player.GetComponent<User>() as User;
             
+
 
 
             upperBoard.AddComponent(upperB);
@@ -84,11 +86,13 @@ namespace BattleShips
             LowerBoard = lowerB;
             lowerBoard.AddComponent(lowerB);
             Instantiate(lowerBoard);
-            user.Board = lowerB.cells;
+            User.Board = lowerB.cells;
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
             _networkHandler.AddListener<ChangeGameState>(NewGameState);
+            _networkHandler.AddListener<SendMousePos>(OpponentMouse);
+            _networkHandler.AddListener<TurnUpdate>(HandleTurnUpdate);
 
             //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
@@ -106,6 +110,54 @@ namespace BattleShips
             base.Initialize();
         }
 
+        private void HandleTurnUpdate(TurnUpdate turnUpdate)
+        {
+            if (turnUpdate.Name != null && turnUpdate.Name == User.Name)
+            {
+                User.YourTurn = turnUpdate.YourTurn;
+            }
+        }
+        private void OpponentMouse(SendMousePos receivedMousePos)
+        {
+         
+            if (receivedMousePos.mousePos != null && receivedMousePos.Name != User.Name)
+            {
+                string[] split = receivedMousePos.mousePos.Split(' ');
+                string tmpX = string.Empty;
+                string tmpY = string.Empty;
+                int x;
+                int y;
+                for (int i = 0; i < split[0].Length; i++)
+                {
+                    if (char.IsDigit(split[0][i]))
+                    {
+                        tmpX += split[0][i];
+                    }
+                    if (char.IsDigit(split[1][i]))
+                    {
+                        tmpY += split[1][i];
+                    }
+                }
+                x = int.Parse(tmpX);
+                y = int.Parse(tmpY) - 10;
+
+                Point point = new Point(x, y);
+
+                foreach (Cell c in LowerBoard.board)
+                {
+                    if (c.cellSquare.Contains(new Rectangle(point.X, point.Y, 2, 2)))
+                    {
+                        c.isHovering = true;
+                    }
+                    else
+                    {
+                        c.isHovering = false;
+                    }
+                }
+            }
+
+            
+        }
         private void NewGameState(ChangeGameState nextGameState)
         {
             User user = Player.GetComponent<User>() as User;
