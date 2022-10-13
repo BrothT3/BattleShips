@@ -39,6 +39,11 @@ namespace BattleShips
 
         public void Execute()
         {
+            if (GameWorld.Instance.User.HasWon)
+            {
+                GameStateController.Instance.ChangeGameState(Victory.Instance);
+            }
+            
             Fire();
             VictoryCondition();
             SendMouseInfo();
@@ -100,10 +105,15 @@ namespace BattleShips
 
                 if (GameWorld.Instance.User.HasHit)
                 {
-                    HitCells++;
+                    if (!selectedCell.isFiredOnAndShipHit)
+                    {
+                        HitCells++;
+                        TargetHit = true;
+                    }
                     GameWorld.Instance.User.HasHit = false;
                     selectedCell.isFiredOnAndShipHit = true;
                 }
+                
 
                 //if (selectedCell.IsOccupied)
                 //{
@@ -127,6 +137,7 @@ namespace BattleShips
                 if (FireTimer <= 0)
                 {
                     Fired = false;
+                    TargetHit = false;
                     FireTimer = 1.2f;
                 }
             }

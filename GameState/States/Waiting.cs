@@ -25,6 +25,10 @@ namespace BattleShips
 
         public void Execute()
         {
+            if (GameWorld.Instance.User.HasLost)
+            {
+                GameStateController.Instance.ChangeGameState(Loss.Instance);
+            }
             ReceiveInfo();
         }
 

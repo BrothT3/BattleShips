@@ -190,7 +190,15 @@ namespace BattleShips
             {
                 spriteBatch.DrawString(GameWorld.Instance.Font, "It Is Your Opponent's Turn", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
             }
-            
+            if (GameStateController.Instance.currentGameState == Victory.Instance)
+            {
+                spriteBatch.DrawString(GameWorld.Instance.Font, "YOU WIN!! GO TELL YOUR MOMMA", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
+            }
+            if (GameStateController.Instance.currentGameState == Loss.Instance)
+            {
+                spriteBatch.DrawString(GameWorld.Instance.Font, "you lost.. your parents must never know this shame", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
+            }
+
 
 
 

@@ -112,13 +112,19 @@ namespace BattleShips
 
         private void HandleTurnUpdate(TurnUpdate turnUpdate)
         {
+            if (turnUpdate.Name != null && turnUpdate.Name != User.Name && turnUpdate.HasWon)
+            {
+                User.HasLost = true;
+            }
             if (turnUpdate.Name != null && turnUpdate.Name == User.Name)
             {
                 User.YourTurn = turnUpdate.YourTurn;
                 User.HasHit = turnUpdate.HasHit;
                 GameStateController.Instance.ChangeGameState(YourTurn.Instance);
+                User.HasWon = turnUpdate.HasWon;
+                User.HasLost = turnUpdate.HasLost;
             }
-            else 
+            else
             {
                 GameStateController.Instance.ChangeGameState(Waiting.Instance);
                 User.YourTurn = false;

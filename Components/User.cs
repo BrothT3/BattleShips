@@ -15,6 +15,8 @@ namespace BattleShips
         public bool isReady { get; set; }
         public bool HasFired { get;set; }
         public bool HasHit { get; set; }
+        public bool HasWon { get; set; }
+        public bool HasLost { get; set; }
     }
 }
 
