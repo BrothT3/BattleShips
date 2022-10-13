@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace BattleShips
@@ -32,19 +34,53 @@ namespace BattleShips
 
         public void Enter()
         {
-            
+
         }
 
         public void Execute()
         {
             Fire();
             VictoryCondition();
+            SendMouseInfo();
+            if (!GameWorld.Instance.User.YourTurn)
+            {
+                ReceiveInfo();
+            }
+          
         }
 
         public void Exit()
         {
 
         }
+
+        public void SendMouseInfo()
+        {
+            try
+            {
+                Cell? selectedCell = GameWorld.Instance.UpperBoard.board.Find(x => x.isHovering == true);
+                if (selectedCell != null)
+                {
+                    GameWorld.Instance._networkHandler.SendMessageToServer(new SendMousePos()
+                    {
+                        mousePos = new Point((int)(selectedCell.Position.X + 0.5f), (int)(selectedCell.Position.Y + 0.5f + 10)).ToString(),
+                        Name = GameWorld.Instance.User.Name
+                    }, MessageType.sendMouseInfo);
+                }
+            }
+            catch (Exception)
+            {
+
+               
+            }
+                       
+        }
+
+        public void ReceiveInfo()
+        {
+            GameWorld.Instance._networkHandler.SendMessageToServer(new SendMousePos(), MessageType.receiveOpponentMouse);
+        }
+
         public void Fire()
         {
             mstate = Mouse.GetState();
