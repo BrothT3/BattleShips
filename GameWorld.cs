@@ -216,8 +216,13 @@ namespace BattleShips
 
             if (currentMessage != prevMessage)
             {
+                if (msgCount >= 10)
+                {
+                    chatLogBuilder.Clear();
+                    msgCount = 0;
+                }
                 chatLogBuilder.AppendLine(currentMessage);
-                //TODO fjern fra stringbuilder når x beskeder er der
+                msgCount++;
             }
             prevMessage = $"{updateChat.Name}: {updateChat.LastMessage}";
 
@@ -247,6 +252,8 @@ namespace BattleShips
 
         }
         float timer = 2f;
+        private int msgCount;
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
