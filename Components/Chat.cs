@@ -186,6 +186,10 @@ namespace BattleShips
                     spriteBatch.DrawString(GameWorld.Instance.Font, "MISS!!", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
                 }
             }
+            if (GameStateController.Instance.currentGameState == Waiting.Instance)
+            {
+                spriteBatch.DrawString(GameWorld.Instance.Font, "It Is Your Opponent's Turn", new Vector2(GameWorld.Instance.Graphics.PreferredBackBufferWidth - 350, GameWorld.Instance.Graphics.PreferredBackBufferHeight / 2 + 50), Color.Black);
+            }
             
 
 
