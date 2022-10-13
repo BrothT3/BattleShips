@@ -23,12 +23,12 @@ namespace BattleShips
         private StringBuilder chatLogBuilder = new StringBuilder();
         public Board UpperBoard;
         public Board LowerBoard;
-        
+
         public List<GameObject> gameObjects = new List<GameObject>();
 
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destroyedGameObjects = new List<GameObject>();
-        
+
 
         public GraphicsDeviceManager Graphics { get => _graphics; }
         public static float DeltaTime;
@@ -72,7 +72,7 @@ namespace BattleShips
 
             //User user = Player.GetComponent<User>() as User;
             User = Player.GetComponent<User>() as User;
-            
+
 
 
 
@@ -81,7 +81,7 @@ namespace BattleShips
             UpperBoard = upperB;
 
             GameObject lowerBoard = new GameObject();
-             lowerB = new Board(9, 24, 24, 10);
+            lowerB = new Board(9, 24, 24, 10);
             SpriteRenderer b2sr = new SpriteRenderer();
             LowerBoard = lowerB;
             lowerBoard.AddComponent(lowerB);
@@ -119,14 +119,13 @@ namespace BattleShips
         }
         private void OpponentMouse(SendMousePos receivedMousePos)
         {
-         
+
             if (receivedMousePos.mousePos != null && receivedMousePos.Name != User.Name)
             {
                 string[] split = receivedMousePos.mousePos.Split(' ');
                 string tmpX = string.Empty;
                 string tmpY = string.Empty;
-                int x;
-                int y;
+
                 for (int i = 0; i < split[0].Length; i++)
                 {
                     if (char.IsDigit(split[0][i]))
@@ -138,25 +137,26 @@ namespace BattleShips
                         tmpY += split[1][i];
                     }
                 }
-                x = int.Parse(tmpX);
-                y = int.Parse(tmpY) - 10;
+                int x = int.Parse(tmpX);
+                int y = int.Parse(tmpY) - 10;
 
                 Point point = new Point(x, y);
 
-                foreach (Cell c in LowerBoard.board)
+                foreach (Point c in LowerBoard.cells.Keys)
                 {
-                    if (c.cellSquare.Contains(new Rectangle(point.X, point.Y, 2, 2)))
+                    if (c == point)
                     {
-                        c.isHovering = true;
+                        LowerBoard.cells[c].isHovering = true;
                     }
                     else
                     {
-                        c.isHovering = false;
+                        LowerBoard.cells[c].isHovering = false;
                     }
+
                 }
             }
 
-            
+
         }
         private void NewGameState(ChangeGameState nextGameState)
         {
@@ -176,7 +176,7 @@ namespace BattleShips
                         break;
                 }
             }
-           
+
         }
 
         private void SetInitialPositionsMessage(SetInitialPositionsMessage initialPositionsMessage)
@@ -244,7 +244,7 @@ namespace BattleShips
             {
                 gameObjects[i].Update(gameTime);
             }
-            
+
             base.Update(gameTime);
             //adds and removes new objects
             CleanUp();
@@ -256,7 +256,7 @@ namespace BattleShips
 
                 if (user != null)
                 {
-                    _networkHandler.SendMessageToServer(new CheckConnection() { Name =user.Name }, MessageType.checkConnection);
+                    _networkHandler.SendMessageToServer(new CheckConnection() { Name = user.Name }, MessageType.checkConnection);
                 }
                 timer = 2;
             }
@@ -329,7 +329,7 @@ namespace BattleShips
 
             destroyedGameObjects.Clear();
             newGameObjects.Clear();
-            
+
         }
 
         /// <summary>
