@@ -13,6 +13,8 @@ namespace BattleShips
         public Dictionary<Point, Cell> Board = new Dictionary<Point, Cell>();
 
         public bool isReady { get; set; }
+        public bool HasFired { get;set; }
+        public bool HasHit { get; set; }
     }
 }
 

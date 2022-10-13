@@ -89,17 +89,33 @@ namespace BattleShips
                 Fired = true;
                 MReleased = false;
                 Cell selectedCell = GameWorld.Instance.UpperBoard.board.Find(x => x.isHovering == true);
-                if (selectedCell.IsOccupied)
+
+                GameWorld.Instance._networkHandler.SendMessageToServer(new SendShotAttempt()
+                {
+                    Name = GameWorld.Instance.User.Name,
+                    MousePos = new Point((int)(selectedCell.Position.X + 0.5f), (int)(selectedCell.Position.Y + 0.5f + 10)).ToString(),
+                    HasFired = true
+
+                }, MessageType.shoot);
+
+                if (GameWorld.Instance.User.HasHit)
                 {
                     HitCells++;
-                    TargetHit = true;
+                    GameWorld.Instance.User.HasHit = false;
                     selectedCell.isFiredOnAndShipHit = true;
                 }
-                else
-                {
-                    TargetHit = false;
-                    selectedCell.isFiredOn = true;
-                }
+
+                //if (selectedCell.IsOccupied)
+                //{
+                //    HitCells++;
+                //    TargetHit = true;
+                //    selectedCell.isFiredOnAndShipHit = true;
+                //}
+                //else
+                //{
+                //    TargetHit = false;
+                //    selectedCell.isFiredOn = true;
+                //}
             }
             if (mstate.LeftButton != ButtonState.Pressed)
             {
@@ -120,6 +136,7 @@ namespace BattleShips
             if (HitCells == 17)
             {
                 //victory state eller noget
+                
             }
         }
 

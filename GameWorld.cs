@@ -115,6 +115,13 @@ namespace BattleShips
             if (turnUpdate.Name != null && turnUpdate.Name == User.Name)
             {
                 User.YourTurn = turnUpdate.YourTurn;
+                User.HasHit = turnUpdate.HasHit;
+                GameStateController.Instance.ChangeGameState(YourTurn.Instance);
+            }
+            else 
+            {
+                GameStateController.Instance.ChangeGameState(Waiting.Instance);
+                User.YourTurn = false;
             }
         }
         private void OpponentMouse(SendMousePos receivedMousePos)
@@ -257,6 +264,7 @@ namespace BattleShips
                 if (user != null)
                 {
                     _networkHandler.SendMessageToServer(new CheckConnection() { Name = user.Name }, MessageType.checkConnection);
+                    _networkHandler.SendMessageToServer(new TurnUpdate(), MessageType.turnUpdate);
                 }
                 timer = 2;
             }

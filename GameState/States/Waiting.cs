@@ -25,12 +25,17 @@ namespace BattleShips
 
         public void Execute()
         {
-
+            ReceiveInfo();
         }
 
         public void Exit()
         {
 
+        }
+
+        public void ReceiveInfo()
+        {
+            GameWorld.Instance._networkHandler.SendMessageToServer(new SendMousePos(), MessageType.receiveOpponentMouse);
         }
     }
 }
