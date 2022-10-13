@@ -115,6 +115,14 @@ namespace BattleShips
                                 networkMessage = complexMessage["message"].ToObject<ChangeGameState>();
                                 messageHandler.Raise(networkMessage);
                                 break;
+                            case MessageType.receiveOpponentMouse:
+                                networkMessage = complexMessage["message"].ToObject<SendMousePos>();
+                                messageHandler.Raise(networkMessage);
+                                break;
+                            case MessageType.turnUpdate:
+                                networkMessage = complexMessage["message"].ToObject<TurnUpdate>();
+                                messageHandler.Raise(networkMessage);
+                                break;
                             default:
                                 break;
                         }

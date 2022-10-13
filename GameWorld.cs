@@ -14,6 +14,7 @@ namespace BattleShips
     {
         public NetWorkHandler _networkHandler;
         public GameObject Player;
+        public User User;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -22,12 +23,12 @@ namespace BattleShips
         private StringBuilder chatLogBuilder = new StringBuilder();
         public Board UpperBoard;
         public Board LowerBoard;
-        
+
         public List<GameObject> gameObjects = new List<GameObject>();
 
         private List<GameObject> newGameObjects = new List<GameObject>();
         private List<GameObject> destroyedGameObjects = new List<GameObject>();
-        
+
 
         public GraphicsDeviceManager Graphics { get => _graphics; }
         public static float DeltaTime;
@@ -69,9 +70,10 @@ namespace BattleShips
             Board upperB = new Board(9, 24, 24, 0);
             SpriteRenderer b1sr = new SpriteRenderer();
 
-            User user = Player.GetComponent<User>() as User;
+            //User user = Player.GetComponent<User>() as User;
+            User = Player.GetComponent<User>() as User;
 
-            
+
 
 
             upperBoard.AddComponent(upperB);
@@ -79,16 +81,18 @@ namespace BattleShips
             UpperBoard = upperB;
 
             GameObject lowerBoard = new GameObject();
-             lowerB = new Board(9, 24, 24, 10);
+            lowerB = new Board(9, 24, 24, 10);
             SpriteRenderer b2sr = new SpriteRenderer();
             LowerBoard = lowerB;
             lowerBoard.AddComponent(lowerB);
             Instantiate(lowerBoard);
-            user.Board = lowerB.cells;
+            User.Board = lowerB.cells;
             _networkHandler = new NetWorkHandler(new NetworkMessageBaseEventHandler());
             _networkHandler.AddListener<SetInitialPositionsMessage>(SetInitialPositionsMessage);
             _networkHandler.AddListener<UpdateChat>(HandleChatUpdate);
             _networkHandler.AddListener<ChangeGameState>(NewGameState);
+            _networkHandler.AddListener<SendMousePos>(OpponentMouse);
+            _networkHandler.AddListener<TurnUpdate>(HandleTurnUpdate);
 
             //_networkHandler.AddListener<SendBoard>(RegisterBoard);
 
@@ -106,6 +110,54 @@ namespace BattleShips
             base.Initialize();
         }
 
+        private void HandleTurnUpdate(TurnUpdate turnUpdate)
+        {
+            if (turnUpdate.Name != null && turnUpdate.Name == User.Name)
+            {
+                User.YourTurn = turnUpdate.YourTurn;
+            }
+        }
+        private void OpponentMouse(SendMousePos receivedMousePos)
+        {
+
+            if (receivedMousePos.mousePos != null && receivedMousePos.Name != User.Name)
+            {
+                string[] split = receivedMousePos.mousePos.Split(' ');
+                string tmpX = string.Empty;
+                string tmpY = string.Empty;
+
+                for (int i = 0; i < split[0].Length; i++)
+                {
+                    if (char.IsDigit(split[0][i]))
+                    {
+                        tmpX += split[0][i];
+                    }
+                    if (char.IsDigit(split[1][i]))
+                    {
+                        tmpY += split[1][i];
+                    }
+                }
+                int x = int.Parse(tmpX);
+                int y = int.Parse(tmpY) - 10;
+
+                Point point = new Point(x, y);
+
+                foreach (Point c in LowerBoard.cells.Keys)
+                {
+                    if (c == point)
+                    {
+                        LowerBoard.cells[c].isHovering = true;
+                    }
+                    else
+                    {
+                        LowerBoard.cells[c].isHovering = false;
+                    }
+
+                }
+            }
+
+
+        }
         private void NewGameState(ChangeGameState nextGameState)
         {
             User user = Player.GetComponent<User>() as User;
@@ -124,7 +176,7 @@ namespace BattleShips
                         break;
                 }
             }
-           
+
         }
 
         private void SetInitialPositionsMessage(SetInitialPositionsMessage initialPositionsMessage)
@@ -192,7 +244,7 @@ namespace BattleShips
             {
                 gameObjects[i].Update(gameTime);
             }
-            
+
             base.Update(gameTime);
             //adds and removes new objects
             CleanUp();
@@ -204,7 +256,7 @@ namespace BattleShips
 
                 if (user != null)
                 {
-                    _networkHandler.SendMessageToServer(new CheckConnection() { Name =user.Name }, MessageType.checkConnection);
+                    _networkHandler.SendMessageToServer(new CheckConnection() { Name = user.Name }, MessageType.checkConnection);
                 }
                 timer = 2;
             }
@@ -277,7 +329,7 @@ namespace BattleShips
 
             destroyedGameObjects.Clear();
             newGameObjects.Clear();
-            
+
         }
 
         /// <summary>
